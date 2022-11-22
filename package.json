@@ -1,0 +1,22 @@
+{
+  "name": "api-gateway",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "gateway:migrate": "docker run api-gateway kong migrations bootstrap",
+    "gateway:reload": "docker run api-gateway kong reload",
+    "gateway:check": "docker run api-gateway kong check /etc/kong/kong.conf",
+    "dev": "docker-compose up",
+    "devd": "npm run dev-detached",
+    "dev-detached": "docker-compose up -d",
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Raphael Batagini",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2"
+  }
+}
