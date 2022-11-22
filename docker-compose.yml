@@ -39,6 +39,7 @@ services:
       - ${API_GATEWAY_DB_PORT}:${API_GATEWAY_DB_PORT}
     volumes:
       - ./api-gateway-db:/var/lib/postgresql/data
+    command: postgres -p ${API_GATEWAY_DB_PORT}
 
   api-gateway-ui:
     image: pocketdigi/kong-admin-ui:0.5.3
@@ -63,6 +64,33 @@ services:
   # cache:
   #   image: redis
 
-  # auth:
-  #   image: 
+  auth:
+    image: quay.io/keycloak/keycloak:20.0.1
+    container_name: auth
+    environment:
+      KEYCLOAK_ADMIN: ${AUTH_ADMIN_USER}
+      KEYCLOAK_ADMIN_PASSWORD: ${AUTH_ADMIN_PASSWORD}
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://auth_db:${AUTH_DB_PORT}/${AUTH_DB_NAME}
+      KC_DB_USERNAME: ${AUTH_DB_USERNAME}
+      KC_DB_PASSWORD: ${AUTH_DB_PASSWORD}
+      KC_HOSTNAME: auth_db
+    command: start-dev
+    ports:
+      - ${AUTH_PORT}:8080
+    depends_on:
+      - auth-db
+
+  auth-db:
+    image: postgres:9.6
+    container_name: auth_db
+    environment:
+      POSTGRES_USER: ${AUTH_DB_USERNAME}
+      POSTGRES_PASSWORD: ${AUTH_DB_PASSWORD}
+      POSTGRES_DB: ${AUTH_DB_NAME}
+    ports:
+      - ${AUTH_DB_PORT}:${AUTH_DB_PORT}
+    volumes:
+      - ./auth-db:/var/lib/postgresql/data
+    command: postgres -p ${AUTH_DB_PORT}
   
