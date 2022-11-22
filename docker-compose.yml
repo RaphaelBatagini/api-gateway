@@ -74,7 +74,6 @@ services:
       KC_DB_URL: jdbc:postgresql://auth_db:${AUTH_DB_PORT}/${AUTH_DB_NAME}
       KC_DB_USERNAME: ${AUTH_DB_USERNAME}
       KC_DB_PASSWORD: ${AUTH_DB_PASSWORD}
-      KC_HOSTNAME: auth_db
     command: start-dev
     ports:
       - ${AUTH_PORT}:8080
